@@ -24,6 +24,7 @@ public :
 
     double norme() const { return std::sqrt(x * x + y * y); }
 
+
 };
 using Point = Vecteur;
 
@@ -33,7 +34,12 @@ typedef std::pair<Segment, Vecteur> Mur;
 class Murs
 {
 public :
-    std::list<Murs> murs;
+    std::list<Mur> murs;
+    bool inMurs(const Point& p);
+    void affiche(const Mur M);
+    void affiches(const Murs M);
+
+
 };
 
 
