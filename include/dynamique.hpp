@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include "foule.hpp" 
+#include "indiv_et_foule.hpp" 
 #include "mur.hpp"
 
 class Dynamique {
