@@ -36,7 +36,8 @@ class Murs
 public :
     std::list<Mur> murs;
     bool inMurs(const Point& p);
-    void affiche(const Mur M);
+    void affichemur(const Mur M);
+    void afficheseg(const Segment S);
     void affiches();
     void ajouteMur(const Mur M);
     void exportMatlab(std::string Nom);
