@@ -46,7 +46,7 @@ public:
 
     vecteur Fattraction();
     vecteur Finteraction(const Individu& B);
-    vecteur Fmurs(const murs& piece);
+    vecteur Fmurs(const Murs& piece);
 };
 
 
