@@ -44,7 +44,8 @@ public:
     std::list<Point> ps;// histoprique des positions
 
     vecteur Fattraction();
-    vecteur Finteraction(const Individu& B);//rajouter force d'attraction
+    vecteur Finteraction(const Individu& B);
+    vecteur Fmurs(const murs& piece);
 };
 
 
