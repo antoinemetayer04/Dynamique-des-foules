@@ -30,10 +30,10 @@ using Point = Vecteur;
 typedef std::pair<Point,Point> Segment;
 typedef std::pair<Segment, Vecteur> Mur;
 
-class Mur
+class Murs
 {
 public :
-    list<Mur> murs;
+    list<Murs> murs;
 };
 
 
