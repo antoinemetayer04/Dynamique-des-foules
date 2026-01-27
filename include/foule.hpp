@@ -1,27 +1,30 @@
+#ifndef indiv_et_foule_HPP_INCLUDED
+#define indiv_et_foule_HPP_INCLUDED
 #include <iostream>
 #include <vector>
 #include <list>
+#include <math.h>
 
 
 
-class Vecteur
+class vecteur
 {
 public :
     double x=0, y=0; //coordonnées d'un point 2D
 
 
-    Vecteur operator+(const Vecteur& v) const { return {x + v.x, y + v.y}; }
-    Vecteur operator-(const Vecteur& v) const { return {x - v.x, y - v.y}; }
-    Vecteur operator*(double s) const { return {x * s, y * s}; }
-    Vecteur operator/(double s) const { return {x / s, y / s}; }
+    vecteur operator+(const vecteur& v) const { return {x + v.x, y + v.y}; }
+    vecteur operator-(const vecteur& v) const { return {x - v.x, y - v.y}; }
+    vecteur operator*(double s) const { return {x * s, y * s}; }
+    vecteur operator/(double s) const { return {x / s, y / s}; }
 
     // Produit scalaire
-    double operator*(const Vecteur& v) const { return x * v.x + y * v.y; }
+    double operator*(const vecteur& v) const { return x * v.x + y * v.y; }
 
     double norme() const { return std::sqrt(x * x + y * y); }
 
 };
-using Point = Vecteur;
+using Point = vecteur;
 
 
 class Individu
@@ -36,13 +39,21 @@ public:
     double w;// vitesse désirée
     Point c; // point cible
     Point p;// position courante
-    Vecteur v; // vitesse courante
-    Vecteur f;// force exercée courante
+    vecteur v; // vitesse courante
+    vecteur f;// force exercée courante
     std::list<Point> ps;// histoprique des positions
+
+    vecteur Fattraction();
+    vecteur Finteraction(const Individu& B);//rajouter force d'attraction
 };
 
 
-class foule
-{
+class Foule
+{   private:
+    public:
     std::list<Individu> listindiv;
+    // rajouter calcul des forces de tous les individus
 };
+
+#endif
+
