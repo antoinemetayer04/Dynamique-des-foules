@@ -44,7 +44,7 @@ Vecteur Individu::Fmurs(const Murs& piece){
         double L2 = u * u;
         double t_proj = ((p - Q1) * u) / L2;
         t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
-        Point pi = Q1 + (u * t_proj);
+        Point pi = Q1 + (u * t_proj);  
 
 
         // calcul des parametres
