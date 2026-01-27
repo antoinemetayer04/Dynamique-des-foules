@@ -29,7 +29,8 @@ public :
     Dynamique(Foule* f, const Murs* m, double pas, int nb_pas);
 
     // Calcul de la dynamique
-    void calculer();
+    void calculer_algo_1();
+    void calculer_algo_2();
 };
 
 #endif
