@@ -37,8 +37,9 @@ public :
     std::list<Mur> murs;
     bool inMurs(const Point& p);
     void affiche(const Mur M);
-    void affiches(const Murs M);
-
+    void affiches();
+    void ajouteMur(const Mur M);
+    void exportMatlab(std::string Nom);
 
 };
 
