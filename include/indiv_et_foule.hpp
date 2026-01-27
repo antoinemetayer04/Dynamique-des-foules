@@ -8,26 +8,6 @@
 
 
 
-class vecteur
-{
-public :
-    double x=0, y=0; //coordonnées d'un point 2D
-
-
-    vecteur operator+(const vecteur& v) const { return {x + v.x, y + v.y}; }
-    vecteur operator-(const vecteur& v) const { return {x - v.x, y - v.y}; }
-    vecteur operator*(double s) const { return {x * s, y * s}; }
-    vecteur operator/(double s) const { return {x / s, y / s}; }
-
-    // Produit scalaire
-    double operator*(const vecteur& v) const { return x * v.x + y * v.y; }
-
-    double norme() const { return std::sqrt(x * x + y * y); }
-
-};
-using Point = vecteur;
-
-
 class Individu
 {
 private :
@@ -40,13 +20,13 @@ public:
     double w;// vitesse désirée
     Point c; // point cible
     Point p;// position courante
-    vecteur v; // vitesse courante
-    vecteur f;// force exercée courante
+    Vecteur v; // vitesse courante
+    Vecteur f;// force exercée courante
     std::list<Point> ps;// histoprique des positions
 
-    vecteur Fattraction();
-    vecteur Finteraction(const Individu& B);
-    vecteur Fmurs(const Murs& piece);
+    Vecteur Fattraction();
+    Vecteur Finteraction(const Individu& B);
+    Vecteur Fmurs(const Murs& piece);
 };
 
 
