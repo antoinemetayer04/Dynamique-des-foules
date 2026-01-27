@@ -33,7 +33,7 @@ typedef std::pair<Segment, Vecteur> Mur;
 class Murs
 {
 public :
-    list<Murs> murs;
+    std::list<Murs> murs;
 };
 
 
