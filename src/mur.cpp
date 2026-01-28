@@ -34,7 +34,8 @@ void Murs::exportMatlab(std::string Nom)
     {
         Segment S = it.first;
         Vecteur N = it.second;
+        fichier << S.first.x << " " << S.first.y << " " << S.second.x << " " << S.second.y << " " << N.x << " " << N.y << std::endl;
 
-        
     }
+    fichier.close();
 }
