@@ -55,3 +55,25 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
     }
     return res;}
 
+void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    for (int i = 0; i < nbIndiv; ++i) {
+        Individu ind;
+        ind.id = i;
+        ind.m = 75.0;           // Masse moyenne selon l'énoncé
+        ind.r = 0.25;           // Rayon moyen (environ 0.5m de diamètre)
+        ind.tau = 0.5;          // Temps de relaxation
+        ind.w = 1.34;
+        std::uniform_real_distribution<double> distX(xMin,xMax);
+        std::uniform_real_distribution<double> distY(yMin,yMax);
+        double x_aleatoire = distX(gen);
+        double y_aleatoire = distY(gen);
+        ind.p = Point(x_aleatoire, y_aleatoire); // Position aléatoire dans la zone
+
+        ind.v = {0, 0};         // Vitesse initiale nulle
+        ind.c = cible;          // Cible commune (la sortie)
+
+        listindiv.push_back(ind);
+    }
+}
