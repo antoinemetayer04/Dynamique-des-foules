@@ -27,10 +27,12 @@ void Dynamique::calculer_algo_1() {
             }
         }
 
-        // Mise à jour des positions et vitesses
+        // Mise à jour des positions et vitesses puis l'historique
         for (Individu& i : foule->listindiv) {
             i.v = i.v + (i.f/i.m) * dt;
             i.p = i.p + i.v * dt;
+            
+            i.ps.push_back(i.p);
         }
     }
 }
@@ -64,9 +66,38 @@ void Dynamique::calculer_algo_2(){
                 i->f = i->f + i->Fmurs(*murs,A,B,k1,k2); 
             }
 
+            // Mise à jour physique
             i->v = i->v + (i->f / i->m) * dt;
-
             i->p = i->p + i->v * dt;
+            
+            // Mise à jour de l'historique
+            i->ps.push_back(i->p);
         }
     }
+}
+
+void Dynamique::exporter(std::string nomFichier) {
+    std::ofstream fichier(nomFichier);
+    
+    if (!fichier.is_open()) {
+        std::cerr << "Erreur : Impossible de créer le fichier d'export." << std::endl;
+        return;
+    }
+
+    // En-tête du fichier (Temps, ID de l'individu, X, Y)
+    fichier << "t,id,x,y\n";
+
+    // On stocke chaque position d'un individu puis on change d'individu
+    int id_indiv = 0;
+    for (const auto& indiv : foule->listindiv) {
+        double t = 0;
+        for (const auto& pos : indiv.ps) {
+            fichier << t << "," << id_indiv << "," << pos.x << "," << pos.y << "\n";
+            t += dt;
+        }
+        id_indiv++;
+    }
+
+    fichier.close();
+    std::cout << "Dynamique exportée avec succès dans : " << nomFichier << std::endl;
 }
