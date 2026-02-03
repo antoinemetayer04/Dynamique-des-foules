@@ -25,8 +25,8 @@ public:
     std::list<Point> ps;// histoprique des positions
 
     Vecteur Fattraction();
-    Vecteur Finteraction(const Individu& B);
-    Vecteur Fmurs(const Murs& piece);
+    Vecteur Finteraction(const Individu& indiv,double A, double B, double k1, double k2);
+    Vecteur Fmurs(const Murs& piece,double A, double B, double k1, double k2);
 };
 
 
