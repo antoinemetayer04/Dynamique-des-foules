@@ -12,11 +12,7 @@ Vecteur Individu::Fattraction(){
     return res;
 }
 
-Vecteur Individu::Finteraction(const Individu& X){
-    double A= 0.05 ;
-    double B= 500;
-    double k1= 100000;
-    double k2= 200000;
+Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
     Vecteur res ;
     double distance = (p-X.p).norme();
     double s = r+X.r - distance ;
@@ -27,11 +23,7 @@ Vecteur Individu::Finteraction(const Individu& X){
     return res;
 }
 
-Vecteur Individu::Fmurs(const Murs& piece){
-    double A= 0.05 ;
-    double B= 500;
-    double k1= 100000;
-    double k2= 200000;
+Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double k2){
     Vecteur res ;
 
     for (const auto& m_pair : piece.murs) {
