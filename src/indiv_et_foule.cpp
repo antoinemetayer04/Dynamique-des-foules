@@ -1,4 +1,5 @@
 #include "indiv_et_foule.hpp"
+#include <random>
 
 
 Vecteur Individu::Fattraction(){
