@@ -58,6 +58,8 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
 void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible) {
     std::random_device rd;
     std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> distX(xMin,xMax);
+    std::uniform_real_distribution<double> distY(yMin,yMax);
     for (int i = 0; i < nbIndiv; ++i) {
         Individu ind;
         ind.id = i;
@@ -65,8 +67,7 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
         ind.r = 0.25;           // Rayon moyen (environ 0.5m de diamètre)
         ind.tau = 0.5;          // Temps de relaxation
         ind.w = 1.34;
-        std::uniform_real_distribution<double> distX(xMin,xMax);
-        std::uniform_real_distribution<double> distY(yMin,yMax);
+        
         double x_aleatoire = distX(gen);
         double y_aleatoire = distY(gen);
         ind.p = Point(x_aleatoire, y_aleatoire); // Position aléatoire dans la zone
