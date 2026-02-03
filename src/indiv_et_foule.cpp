@@ -16,7 +16,7 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
 
     Vecteur res= {0,0};
     double distance = (p-X.p).norme();
-    if (r > 1e-7) {
+    if (distance > 1e-7) {
     double s = r+X.r - distance ;
     Vecteur n = (p- X.p)/ distance;
     Vecteur t = {-n.y, n.x};
