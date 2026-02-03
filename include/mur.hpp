@@ -17,15 +17,14 @@ public :
     Vecteur operator+(const Vecteur& v) const { return {x + v.x, y + v.y}; }
     Vecteur operator-(const Vecteur& v) const { return {v.x-x,v.y-y}; }
     Vecteur operator*(double s) const { return {x * s, y * s}; }
-    Vecteur operator*(double s) const { return {s * x, s * y}; }
     Vecteur operator/(double s) const { return {x / s, y / s}; }
-
-    // Produit scalaire
     double operator*(const Vecteur& v) const { return x * v.x + y * v.y; }
     double norme() const { return std::sqrt(x * x + y * y); }
 
 
 };
+
+Vecteur operator*(double s, const Vecteur& v) {return v*s ;};
 using Point = Vecteur;
 
 typedef std::pair<Point,Point> Segment;
