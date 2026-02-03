@@ -13,18 +13,23 @@ Vecteur Individu::Fattraction(){
 }
 
 Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
-    Vecteur res ;
+
+    Vecteur res= {0,0};
     double distance = (p-X.p).norme();
+    if (r > 1e-7) {
     double s = r+X.r - distance ;
     Vecteur n = (p- X.p)/ distance;
     Vecteur t = {-n.y, n.x};
     double delta = (v-X.v)*t;
     res = n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;
+
+}
     return res;
 }
 
 Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double k2){
-    Vecteur res ;
+
+    Vecteur res = {0,0};
 
     for (const auto& m_pair : piece.murs) {
         Segment leSegment = m_pair.first;
@@ -36,15 +41,17 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         double L2 = u * u;
         double t_proj = ((p - Q1) * u) / L2;
         t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
-        Point pi = Q1 + (u * t_proj);  
+        Point pi = Q1 + (u * t_proj);   // chat gpt a juste fait la projection.
 
 
         // calcul des parametres
         double distance = (p-pi).norme();
         double s = r-distance ;
+        if (distance > 1e-7 ){
         Vecteur n = (p- pi)/ distance;
         Vecteur t = {-n.y, n.x};
         double delta = v*t;
-        res= res + n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;
+        res= res + n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;}
     }
     return res;}
+
