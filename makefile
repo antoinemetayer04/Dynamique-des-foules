@@ -4,6 +4,7 @@ INCLUDE_PATH = ./include
 SOURCE_PATH  = ./src
 TEST_PATH    = ./test
 BUILD_PATH   = ./build
+RESULTS_PATH = ./results
 
 SRC  = $(shell find $(SOURCE_PATH) -type f -name "*.cpp")
 OBJ  = $(patsubst $(SOURCE_PATH)/%.cpp, $(BUILD_PATH)/%.o, $(SRC))
@@ -22,6 +23,7 @@ LDFLAGS  =
 all: $(EXE)
 
 run: $(EXE)
+	@mkdir -p results
 	./$(EXE)
 
 $(EXE): $(OBJ)
@@ -48,7 +50,10 @@ clean:
 	@rm -rf $(BUILD_PATH)
 	@rm -f $(TEST)
 
-realclean: clean
+clean-data:
+	@rm -rf $(RESULTS_PATH)
+
+realclean: clean 
 	@rm -f $(EXE)
 
 -include $(OBJ:.o=.d)
