@@ -56,29 +56,56 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
     }
     return res;}
 
-void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax,Point cible) {// rajouiter poid et rayon aleatoire /porte de sortie
+void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> distX(xMin,xMax);
-    std::uniform_real_distribution<double> distY(yMin,yMax);
-    std::normal_distribution<double> poids(40,100);
-
+    std::uniform_real_distribution<double> distX(xMin, xMax);
+    std::uniform_real_distribution<double> distY(yMin, yMax);
+    // Poids (moyenne 70kg, écart-type 15kg )
+    std::normal_distribution<double> poids(70, 15);
 
     for (int i = 0; i < nbIndiv; ++i) {
         Individu ind;
         ind.id = i;
-        double poids_aleatoire= poids(gen);
-        ind.m = poids_aleatoire ;
-        ind.r = 0.25;
+        ind.m = poids(gen);
+        ind.r = 0.25; // Rayon de 25cm
         ind.tau = 0.5;
         ind.w = 1.34;
-
-        double x_aleatoire = distX(gen);
-        double y_aleatoire = distY(gen);
-        ind.p = Point(x_aleatoire, y_aleatoire);
-        ind.v = {0, 0};
         ind.c = cible;
+        ind.v = {0, 0};
+
+        bool positionValide = false;
+        int tentatives = 0;
+        const int MAX_TENTATIVES = 1000;
+//verification des chevauchements : 
+        while (!positionValide && tentatives < MAX_TENTATIVES) {
+            double x_test = distX(gen);
+            double y_test = distY(gen);
+            Point p_test(x_test, y_test);
+
+            positionValide = true;
+            for (const auto& existant : listindiv) {
+                double dist = (p_test - existant.p).norme();
+                // On laisse une petite marge de sécurité (ici 0.1m)
+                if (dist < (ind.r + existant.r + 0.1)) {
+                    positionValide = false;
+                    break;
+                }
+            }
+
+            if (positionValide) {
+                ind.p = p_test;
+            }
+            tentatives++;
+        }
+
+        if (tentatives >= MAX_TENTATIVES) {
+            std::cerr << "Impossible de placer l'individu " << i
+                      << " Zone trop dense !" << std::endl;
+            break; // On arrête de générer pour éviter une boucle infinie
+        }
 
         listindiv.push_back(ind);
     }
 }
+
