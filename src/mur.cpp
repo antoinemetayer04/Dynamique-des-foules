@@ -30,11 +30,12 @@ void Murs::affiches()
 void Murs::exportMatlab(std::string Nom)
 {
     std::ofstream fichier(Nom);
+    fichier << "x1,y1,x2,y2,Nx,Ny\n";
     for(const auto& it : murs)
     {
         Segment S = it.first;
         Vecteur N = it.second;
-        fichier << S.first.x << " " << S.first.y << " " << S.second.x << " " << S.second.y << " " << N.x << " " << N.y << std::endl;
+        fichier << S.first.x << "," << S.first.y << "," << S.second.x << "," << S.second.y << "," << N.x << "," << N.y << std::endl;
 
     }
     fichier.close();

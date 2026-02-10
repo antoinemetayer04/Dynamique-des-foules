@@ -1,7 +1,7 @@
 clear; clc;
 
 %% Chargement des données
-data = readtable('resultats.csv');
+data = readtable('resultats_aleatoires.csv');
 
 % Extraction des paramètres t et id
 ids = unique(data.id);
