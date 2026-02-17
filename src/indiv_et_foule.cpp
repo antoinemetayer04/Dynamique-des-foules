@@ -15,7 +15,7 @@ Vecteur Individu::Fattraction(){
 }
 
 Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
-
+    
     Vecteur res= {0,0};
     double distance = (p-X.p).norme();
     if (distance > 1e-7) {
@@ -23,7 +23,9 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     Vecteur n = (p- X.p)/ distance;
     Vecteur t = {-n.y, n.x};
     double delta = (v-X.v)*t;
-    res = n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;
+    //extension dependance angulaire :
+    double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
+    res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ;
 
 }
     return res;
@@ -64,7 +66,7 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
     std::uniform_real_distribution<double> distY(yMin, yMax);
     // Poids (moyenne 70kg, écart-type 15kg )
     std::normal_distribution<double> poids(100, 40);
-
+    
 
     for (int i = 0; i < nbIndiv; ++i) {
         Individu ind;
