@@ -33,7 +33,7 @@ int main() {
     Piece1.ajouteMur(std::make_pair(seg3_1, normale_droite));
 
     Point q5_1(10,5), q6_1(10,15);
-    Segment seg4_1(q1_1, q5_1);
+    Segment seg4_1(q2_1, q5_1);
     Vecteur normale_gauche (-1, 0);
     Piece1.ajouteMur(std::make_pair(seg4_1, normale_gauche));
 
