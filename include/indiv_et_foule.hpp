@@ -36,6 +36,7 @@ class Foule
     std::list<Individu> listindiv;
     // rajouter calcul des forces de tous les individus
     void genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible);
+    void genererFouleFichier(const std::string& nomFichier , Point cible);
 };
 
 #endif

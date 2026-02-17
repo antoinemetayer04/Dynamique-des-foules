@@ -1,6 +1,7 @@
 #include "indiv_et_foule.hpp"
 #include <random>
-
+#include <fstream>
+#include <iostream>
 
 Vecteur Individu::Fattraction(){
     Vecteur d;
@@ -62,13 +63,14 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
     std::uniform_real_distribution<double> distX(xMin, xMax);
     std::uniform_real_distribution<double> distY(yMin, yMax);
     // Poids (moyenne 70kg, écart-type 15kg )
-    std::normal_distribution<double> poids(70, 15);
+    std::normal_distribution<double> poids(100, 40);
+
 
     for (int i = 0; i < nbIndiv; ++i) {
         Individu ind;
         ind.id = i;
         ind.m = poids(gen);
-        ind.r = 0.25; // Rayon de 25cm
+        ind.r = (0.25/70)*ind.m; // Rayon de 25cm
         ind.tau = 0.5;
         ind.w = 1.34;
         ind.c = cible;
@@ -109,3 +111,29 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
     }
 }
 
+void Foule::genererFouleFichier(const std::string& nomFichier , Point cible) {
+    std::ifstream fichier(nomFichier);
+    if (!fichier.is_open()) {
+        std::cerr << "Erreur lors de l'ouverture du fichier : " << nomFichier << std::endl;
+        return;
+    }
+
+    int id, ng;
+    double m, r, tau, w, x, y;
+
+    while (fichier >> id >> ng >> m >> r >> tau >> w >> x >> y) {
+        Individu ind;
+        ind.id = id;
+        ind.ng = ng;
+        ind.m = m;
+        ind.r = r;
+        ind.tau = tau;
+        ind.w = w;
+        ind.c = cible;
+        ind.p = {x, y};
+        ind.v = {0, 0}; // Vitesse initiale à zéro
+        listindiv.push_back(ind);
+    }
+
+    fichier.close();
+}
