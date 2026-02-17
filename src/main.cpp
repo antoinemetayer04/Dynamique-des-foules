@@ -38,12 +38,12 @@ int main() {
     Piece1.ajouteMur(std::make_pair(seg4_1, normale_gauche));
 
     Segment seg5_1(q4_1, q6_1);
-    Vecteur normale_gauche(-1, 0);
+
     Piece1.ajouteMur(std::make_pair(seg5_1, normale_gauche));
 
     Point q7_1(7.5, 16), q8_1(7.5, 4);
     Segment seg6_1(q7_1,q8_1);
-    Vecteur normale_gauche(-1,0);
+
     Piece1.ajouteMur(std::make_pair(seg6_1, normale_gauche));
 
     // --- 2. Génération aléatoire de la Foule ---
