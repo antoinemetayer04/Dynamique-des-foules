@@ -37,7 +37,7 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
 
     for (const auto& m_pair : piece.murs) {
         Segment leSegment = m_pair.first;
-
+        Vecteur normale = m_pair.second;
         Point Q1 = leSegment.first;
         Point Q2 = leSegment.second;
     // calcul projeté sur le mur :
@@ -49,7 +49,7 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
 
 
         // calcul des parametres
-        double distance = (p-pi).norme();
+        double distance = (p-pi)*normale;
         double s = r-distance ;
         if (distance > 1e-7 ){
         Vecteur n = (p- pi)/ distance;
