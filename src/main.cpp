@@ -15,6 +15,37 @@ int main() {
     Vecteur normale(0, 1);
     maPiece.ajouteMur(std::make_pair(seg, normale));
 
+    // -Création d'une première pièce 
+
+    Murs Piece1;
+    Point q1(-10,0), q2(10,0);
+    Segment seg(q1,q2);
+    Vecteur normale(0,1);
+    Piece1.ajouteMur(std::make_pair(seg,normale));
+
+    Point q3(-10,20), q4(10,20);
+    Segment seg(q3, q4);
+    Vecteur normale(0,-1);
+    Piece1.ajouteMur(std::make_pair(seg, normale));
+
+    Segment seg(q1, q3);
+    Vecteur normale(1,0);
+    Piece1.ajouteMur(std::make_pair(seg, normale));
+
+    Point q5(10,5), q6(10,15);
+    Segment seg(q1, q5);
+    Vecteur normale (-1, 0);
+    Piece1.ajouteMur(std::make_pair(seg, normale));
+
+    Segment seg(q4, q6);
+    Vecteur normale(-1, 0);
+    Piece1.ajouteMur(std::make_pair(seg, normale));
+
+    Point q7(7.5, 16), q8(7.5, 4);
+    Segment seg(q7,q8);
+    Vecteur normale(-1,0);
+    Piece1.ajouteMur(std::make_pair(seg, normale))
+
     // --- 2. Génération aléatoire de la Foule ---
     Foule maFoule;
     int nbIndividus = 10;
