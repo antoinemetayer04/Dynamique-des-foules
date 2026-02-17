@@ -46,7 +46,22 @@ int main() {
 
     Piece1.ajouteMur(std::make_pair(seg6_1, normale_gauche));
 
-    Piece1.ajouteMur(std::make_pair(seg6_1, normale_droite));
+    Murs Piece2;
+
+    Point q1_2(-20,0), q2_2(20,0);
+    Segment seg1_2(q1_2,q2_2);
+    Piece2.ajouteMur(std::make_pair(seg1_2, normale_haut));
+
+    Point q3_2(-20,20), q4_2(20,20);
+    Segment seg2_2(q3_2, q4_2);
+    Piece2.ajouteMur(std::make_pair(seg2_2, normale_bas));
+
+    Segment seg3_2(q1_2, q3_2);
+    Piece2.ajouteMur(std::make_pair(seg3_2, normale_droite));
+
+    Point q5_2(20, 5), q6_2(20, 15);
+    Segment seg(q2_2, q5_2);
+
 
     // --- 2. Génération aléatoire de la Foule ---
     Foule maFoule;
