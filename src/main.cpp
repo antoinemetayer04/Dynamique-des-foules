@@ -46,6 +46,8 @@ int main() {
 
     Piece1.ajouteMur(std::make_pair(seg6_1, normale_gauche));
 
+    Piece1.ajouteMur(std::make_pair(seg6_1, normale_droite));
+
     // --- 2. Génération aléatoire de la Foule ---
     Foule maFoule;
     int nbIndividus = 10;
