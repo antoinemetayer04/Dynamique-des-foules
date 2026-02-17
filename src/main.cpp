@@ -59,7 +59,7 @@ int main() {
     int nb_pas = 2000;   // Simulation sur 20 secondes
     
     // Initialisation du moteur de simulation
-    Dynamique simu(&maFoule, &maPiece, dt, nb_pas);
+    Dynamique simu(&maFoule, &Piece1, dt, nb_pas);
     
     // Paramètres physiques (Modèle de Helbing)
     simu.A = 2000; 
