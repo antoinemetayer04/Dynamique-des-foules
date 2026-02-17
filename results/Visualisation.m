@@ -18,8 +18,8 @@ xlabel('Position X (m)');
 ylabel('Position Y (m)');
 
 % Définition des limites des axes
-all_x = [data_foule.x; data_murs.x1; data_murs.x2];
-all_y = [data_foule.y; data_murs.y1; data_murs.y2];
+all_x = [data_murs.x1; data_murs.x2];
+all_y = [data_murs.y1; data_murs.y2];
 axis([min(all_x)-1 max(all_x)+1 min(all_y)-1 max(all_y)+1]); 
 
 % Tracé du mur
