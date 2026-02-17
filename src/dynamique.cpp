@@ -1,141 +1,166 @@
-#include "indiv_et_foule.hpp"
-#include <random>
+#include "dynamique.hpp"
 #include <fstream>
 #include <iostream>
+#include <cmath>
+#include <random>
+#include <algorithm>
 
-Vecteur Individu::Fattraction(){
-    Vecteur d;
-    double distance = (c - p).norme();
-    if (distance!=0){
-    d = (c-p)/distance;}
-    else { d = {0,0} ;}   //direction normalisée
+Dynamique::Dynamique(Foule* f, const Murs* m, double pas, int nb_pas) 
+    : murs(m), foule(f), dt(pas), nbt(nb_pas) {}
 
-    Vecteur res = (d * w - v) * (m / tau);
-    return res;
-}
+void Dynamique::calculer_algo_1() {
+    for (int k = 0; k < nbt; ++k) {
+        // Calcul des forces pour chaque individu
+        for (Individu& i : foule->listindiv) {
+            // Réinitialisation de l'envie de sortir
+            i.f = i.Fattraction();
+            
+            // Interaction avec les autres individus
+            for (const Individu& autre : foule->listindiv) {
+                if (i.id != autre.id) {
+                    i.f = i.f + i.Finteraction(autre,A,B,k1,k2);
+                }
+            }
+            // Interaction avec les murs
+            if (murs != nullptr) {
+                i.f = i.f + i.Fmurs(*murs,A,B,k1,k2);
+            }
+        }
 
-Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
-    
-    Vecteur res= {0,0};
-    double distance = (p-X.p).norme();
-    if (distance > 1e-7) {
-    double s = r+X.r - distance ;
-    Vecteur n = (p- X.p)/ distance;
-    Vecteur t = {-n.y, n.x};
-    double delta = (v-X.v)*t;
-    //extension dependance angulaire :
-    double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
-    res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ;
+        // Mise à jour des positions et vitesses puis l'historique
+        for (Individu& i : foule->listindiv) {
+            // Limitation de l'accélération pour éviter sauts numériques
+            Vecteur accel = i.f / i.m;
+            double a_max = 50.0; // m/s^2, valeur conservatrice
+            double an = accel.norme();
+            if (an > a_max) accel = accel * (a_max / an);
 
-}
-    return res;
-}
+            i.v = i.v + accel * dt;
+            // Limitation vitesse
+            double v_max = 5.0; // m/s
+            double vn = i.v.norme();
+            if (vn > v_max) i.v = i.v * (v_max / vn);
 
-Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double k2){
+            i.p = i.p + i.v * dt;
 
-    Vecteur res = {0,0};
-
-    for (const auto& m_pair : piece.murs) {
-        Segment leSegment = m_pair.first;
-        Vecteur normale = m_pair.second;
-        Point Q1 = leSegment.first;
-        Point Q2 = leSegment.second;
-    // calcul projeté sur le mur :
-        Vecteur u = Q2 - Q1;
-        double L2 = u * u;
-        double t_proj = ((p - Q1) * u) / L2;
-        t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
-        Point pi = Q1 + (u * t_proj);   // chat gpt a juste fait la projection.
-
-
-        // calcul des parametres
-        double distance = (p-pi)*normale;
-        double s = r-distance ;
-        if (distance > 1e-7 ){
-        Vecteur n = (p- pi)/ distance;
-        Vecteur t = {-n.y, n.x};
-        double delta = v*t;
-        res= res + n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;}
-    }
-    return res;}
-
-void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> distX(xMin, xMax);
-    std::uniform_real_distribution<double> distY(yMin, yMax);
-    // Poids (moyenne 70kg, écart-type 15kg )
-    std::normal_distribution<double> poids(100, 40);
-    
-
-    for (int i = 0; i < nbIndiv; ++i) {
-        Individu ind;
-        ind.id = i;
-        ind.m = poids(gen);
-        ind.r = (0.25/70)*ind.m; // Rayon de 25cm
-        ind.tau = 0.5;
-        ind.w = 1.34;
-        ind.c = cible;
-        ind.v = {0, 0};
-
-        bool positionValide = false;
-        int tentatives = 0;
-        const int MAX_TENTATIVES = 1000;
-//verification des chevauchements : 
-        while (!positionValide && tentatives < MAX_TENTATIVES) {
-            double x_test = distX(gen);
-            double y_test = distY(gen);
-            Point p_test(x_test, y_test);
-
-            positionValide = true;
-            for (const auto& existant : listindiv) {
-                double dist = (p_test - existant.p).norme();
-                // On laisse une petite marge de sécurité (ici 0.1m)
-                if (dist < (ind.r + existant.r + 0.1)) {
-                    positionValide = false;
-                    break;
+            // Correction de pénétration pour les murs
+            if (murs != nullptr) {
+                for (const auto& m_pair : murs->murs) {
+                    Segment S = m_pair.first;
+                    Point Q1 = S.first;
+                    Point Q2 = S.second;
+                    Vecteur u = Q2 - Q1;
+                    double L2 = u * u;
+                    if (L2 <= 1e-12) continue;
+                    double t_proj = ((i.p - Q1) * u) / L2;
+                    t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
+                    Point pi = Q1 + (u * t_proj);
+                    double distance = (i.p - pi).norme();
+                    if (distance < i.r && distance > 1e-12) {
+                        Vecteur n = (i.p - pi) / distance;
+                        i.p = pi + n * i.r;
+                        double vn_n = i.v * n;
+                        i.v = i.v - n * vn_n; // supprimer composante normale
+                    }
                 }
             }
 
-            if (positionValide) {
-                ind.p = p_test;
-            }
-            tentatives++;
+            i.ps.push_back(i.p);
         }
-
-        if (tentatives >= MAX_TENTATIVES) {
-            std::cerr << "Impossible de placer l'individu " << i
-                      << " Zone trop dense !" << std::endl;
-            break; // On arrête de générer pour éviter une boucle infinie
-        }
-
-        listindiv.push_back(ind);
     }
 }
 
-void Foule::genererFouleFichier(const std::string& nomFichier , Point cible) {
-    std::ifstream fichier(nomFichier);
+void Dynamique::calculer_algo_2(){
+    std::vector<Individu*> ordre;
+    for (auto& ind : foule->listindiv) {
+        ordre.push_back(&ind);
+    }
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    
+    for (int k = 0; k < nbt; ++k) {
+        // Mélange aléatoire de l'ordre de passage à chaque pas de temps
+        std::shuffle(ordre.begin(), ordre.end(), g);
+        for (Individu* i : ordre) {
+            
+            // Réinitialisation de l'envie de sortir
+            i->f = i->Fattraction();
+
+            // Interaction avec les autres individus
+            for (const Individu& autre : foule->listindiv) {
+                if (i->id != autre.id) {
+                    i->f = i->f + i->Finteraction(autre,A,B,k1,k2);
+                }
+            }
+
+            // Interaction avec les murs
+            if (murs != nullptr) {
+                i->f = i->f + i->Fmurs(*murs,A,B,k1,k2); 
+            }
+
+            // Mise à jour physique avec clamp et correction
+            Vecteur accel = i->f / i->m;
+            double a_max = 50.0;
+            double an = accel.norme();
+            if (an > a_max) accel = accel * (a_max / an);
+
+            i->v = i->v + accel * dt;
+            double v_max = 5.0;
+            double vn = i->v.norme();
+            if (vn > v_max) i->v = i->v * (v_max / vn);
+
+            i->p = i->p + i->v * dt;
+
+            if (murs != nullptr) {
+                for (const auto& m_pair : murs->murs) {
+                    Segment S = m_pair.first;
+                    Point Q1 = S.first;
+                    Point Q2 = S.second;
+                    Vecteur u = Q2 - Q1;
+                    double L2 = u * u;
+                    if (L2 <= 1e-12) continue;
+                    double t_proj = ((i->p - Q1) * u) / L2;
+                    t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
+                    Point pi = Q1 + (u * t_proj);
+                    double distance = (i->p - pi).norme();
+                    if (distance < i->r && distance > 1e-12) {
+                        Vecteur n = (i->p - pi) / distance;
+                        i->p = pi + n * i->r;
+                        double vn_n = i->v * n;
+                        i->v = i->v - n * vn_n;
+                    }
+                }
+            }
+
+            // Mise à jour de l'historique
+            i->ps.push_back(i->p);
+        }
+    }
+}
+
+void Dynamique::exporter(std::string nomFichier) {
+    std::ofstream fichier(nomFichier);
+    
     if (!fichier.is_open()) {
-        std::cerr << "Erreur lors de l'ouverture du fichier : " << nomFichier << std::endl;
+        std::cerr << "Erreur : Impossible de créer le fichier d'export." << std::endl;
         return;
     }
 
-    int id, ng;
-    double m, r, tau, w, x, y;
+    // En-tête du fichier (Temps, ID de l'individu, X, Y)
+    fichier << "t,id,x,y,r\n";
 
-    while (fichier >> id >> ng >> m >> r >> tau >> w >> x >> y) {
-        Individu ind;
-        ind.id = id;
-        ind.ng = ng;
-        ind.m = m;
-        ind.r = r;
-        ind.tau = tau;
-        ind.w = w;
-        ind.c = cible;
-        ind.p = {x, y};
-        ind.v = {0, 0}; // Vitesse initiale à zéro
-        listindiv.push_back(ind);
+    // On stocke chaque position d'un individu puis on change d'individu
+    int id_indiv = 0;
+    for (const auto& indiv : foule->listindiv) {
+        double t = 0;
+        for (const auto& pos : indiv.ps) {
+            fichier << t << "," << id_indiv << "," << pos.x << "," << pos.y << "," << indiv.r << "\n";
+            t += dt;
+        }
+        id_indiv++;
     }
 
     fichier.close();
+    std::cout << "Dynamique exportée avec succès dans : " << nomFichier << std::endl;
 }
