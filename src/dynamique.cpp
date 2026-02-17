@@ -85,14 +85,14 @@ void Dynamique::exporter(std::string nomFichier) {
     }
 
     // En-tête du fichier (Temps, ID de l'individu, X, Y)
-    fichier << "t,id,x,y\n";
+    fichier << "t,id,x,y,r\n";
 
     // On stocke chaque position d'un individu puis on change d'individu
     int id_indiv = 0;
     for (const auto& indiv : foule->listindiv) {
         double t = 0;
         for (const auto& pos : indiv.ps) {
-            fichier << t << "," << id_indiv << "," << pos.x << "," << pos.y << "\n";
+            fichier << t << "," << id_indiv << "," << pos.x << "," << pos.y << "," << indiv.r << "\n";
             t += dt;
         }
         id_indiv++;
