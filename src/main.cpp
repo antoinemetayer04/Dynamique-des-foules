@@ -49,7 +49,7 @@ int main() {
     // --- 2. Génération aléatoire de la Foule ---
     Foule maFoule;
     int nbIndividus = 10;
-    Point laSortie(15, 2); // Destination commune pour tout le monde
+    Point laSortie(10, 10); // Destination commune pour tout le monde
 
     // On génère 10 personnes entre x=[0,2] et y=[1,3]
     maFoule.genererFoule(nbIndividus, -9.0, 7.0, 1.0, 19.0, laSortie);
