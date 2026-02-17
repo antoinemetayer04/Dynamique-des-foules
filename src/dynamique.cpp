@@ -12,6 +12,7 @@ void Dynamique::calculer_algo_1() {
     for (int k = 0; k < nbt; ++k) {
         // Calcul des forces pour chaque individu
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         for (Individu& i : foule->listindiv) {
             // Réinitialisation de l'envie de sortir
             i.f = i.Fattraction();
@@ -30,10 +31,21 @@ void Dynamique::calculer_algo_1() {
                 if (I.id != J.id) {
                     I.f = I.f + I.Finteraction(J,A,B,k1,k2);
 >>>>>>> Stashed changes
+=======
+        for (Individu& I : foule->listindiv) {
+            // Réinitialisation de l'envie de sortir
+            I.f = I.Fattraction();
+            
+            // Interaction avec les autres individus
+            for (const Individu& J : foule->listindiv) {
+                if (I.id != J.id) {
+                    I.f = I.f + I.Finteraction(J,A,B,k1,k2);
+>>>>>>> Stashed changes
                 }
             }
             // Interaction avec les murs
             if (murs != nullptr) {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 i.f = i.f + i.Fmurs(*murs,A,B,k1,k2);
             }
@@ -46,6 +58,8 @@ void Dynamique::calculer_algo_1() {
             
             i.ps.push_back(i.p);
 =======
+=======
+>>>>>>> Stashed changes
                 I.f = I.f + I.Fmurs(*murs,A,B,k1,k2);
             }
         }
@@ -54,6 +68,9 @@ void Dynamique::calculer_algo_1() {
         for (Individu& I : foule->listindiv) {
             I.v = I.v + (I.f/I.m) * dt;
             I.p = I.p + I.v * dt;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         }
     }

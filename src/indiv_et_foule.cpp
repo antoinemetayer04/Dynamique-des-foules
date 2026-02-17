@@ -16,9 +16,12 @@ Vecteur Individu::Fattraction(){
 
 Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     
     Vecteur res= {0,0};
 =======
+=======
+>>>>>>> Stashed changes
     Vecteur res ;
 >>>>>>> Stashed changes
     double distance = (p-X.p).norme();
@@ -37,9 +40,12 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
 
 Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double k2){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     Vecteur res = {0,0};
 =======
+=======
+>>>>>>> Stashed changes
     Vecteur res ;
 >>>>>>> Stashed changes
 
