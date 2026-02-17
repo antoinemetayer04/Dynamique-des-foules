@@ -1,142 +1,141 @@
-#include "dynamique.hpp"
+#include "indiv_et_foule.hpp"
+#include <random>
 #include <fstream>
 #include <iostream>
-#include <cmath>
-#include <random>
-#include <algorithm>
 
-Dynamique::Dynamique(Foule* f, const Murs* m, double pas, int nb_pas) 
-    : murs(m), foule(f), dt(pas), nbt(nb_pas) {}
+Vecteur Individu::Fattraction(){
+    Vecteur d;
+    double distance = (c - p).norme();
+    if (distance!=0){
+    d = (c-p)/distance;}
+    else { d = {0,0} ;}   //direction normalisée
 
-void Dynamique::calculer_algo_1() {
-    for (int k = 0; k < nbt; ++k) {
-        // Calcul des forces pour chaque individu
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        for (Individu& i : foule->listindiv) {
-            // Réinitialisation de l'envie de sortir
-            i.f = i.Fattraction();
-            
-            // Interaction avec les autres individus
-            for (const Individu& autre : foule->listindiv) {
-                if (i.id != autre.id) {
-                    i.f = i.f + i.Finteraction(autre,A,B,k1,k2);
-=======
-        for (Individu& I : foule->listindiv) {
-            // Réinitialisation de l'envie de sortir
-            I.f = I.Fattraction();
-            
-            // Interaction avec les autres individus
-            for (const Individu& J : foule->listindiv) {
-                if (I.id != J.id) {
-                    I.f = I.f + I.Finteraction(J,A,B,k1,k2);
->>>>>>> Stashed changes
-=======
-        for (Individu& I : foule->listindiv) {
-            // Réinitialisation de l'envie de sortir
-            I.f = I.Fattraction();
-            
-            // Interaction avec les autres individus
-            for (const Individu& J : foule->listindiv) {
-                if (I.id != J.id) {
-                    I.f = I.f + I.Finteraction(J,A,B,k1,k2);
->>>>>>> Stashed changes
-                }
-            }
-            // Interaction avec les murs
-            if (murs != nullptr) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                i.f = i.f + i.Fmurs(*murs,A,B,k1,k2);
-            }
-        }
-
-        // Mise à jour des positions et vitesses puis l'historique
-        for (Individu& i : foule->listindiv) {
-            i.v = i.v + (i.f/i.m) * dt;
-            i.p = i.p + i.v * dt;
-            
-            i.ps.push_back(i.p);
-=======
-=======
->>>>>>> Stashed changes
-                I.f = I.f + I.Fmurs(*murs,A,B,k1,k2);
-            }
-        }
-
-        // Mise à jour des positions et vitesses
-        for (Individu& I : foule->listindiv) {
-            I.v = I.v + (I.f/I.m) * dt;
-            I.p = I.p + I.v * dt;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        }
-    }
+    Vecteur res = (d * w - v) * (m / tau);
+    return res;
 }
 
-void Dynamique::calculer_algo_2(){
-    std::vector<Individu*> ordre;
-    for (auto& ind : foule->listindiv) {
-        ordre.push_back(&ind);
-    }
+Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
+    
+    Vecteur res= {0,0};
+    double distance = (p-X.p).norme();
+    if (distance > 1e-7) {
+    double s = r+X.r - distance ;
+    Vecteur n = (p- X.p)/ distance;
+    Vecteur t = {-n.y, n.x};
+    double delta = (v-X.v)*t;
+    //extension dependance angulaire :
+    double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
+    res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ;
 
+}
+    return res;
+}
+
+Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double k2){
+
+    Vecteur res = {0,0};
+
+    for (const auto& m_pair : piece.murs) {
+        Segment leSegment = m_pair.first;
+        Vecteur normale = m_pair.second;
+        Point Q1 = leSegment.first;
+        Point Q2 = leSegment.second;
+    // calcul projeté sur le mur :
+        Vecteur u = Q2 - Q1;
+        double L2 = u * u;
+        double t_proj = ((p - Q1) * u) / L2;
+        t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
+        Point pi = Q1 + (u * t_proj);   // chat gpt a juste fait la projection.
+
+
+        // calcul des parametres
+        double distance = (p-pi)*normale;
+        double s = r-distance ;
+        if (distance > 1e-7 ){
+        Vecteur n = (p- pi)/ distance;
+        Vecteur t = {-n.y, n.x};
+        double delta = v*t;
+        res= res + n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;}
+    }
+    return res;}
+
+void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible) {
     std::random_device rd;
-    std::mt19937 g(rd());
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> distX(xMin, xMax);
+    std::uniform_real_distribution<double> distY(yMin, yMax);
+    // Poids (moyenne 70kg, écart-type 15kg )
+    std::normal_distribution<double> poids(100, 40);
     
-    for (int k = 0; k < nbt; ++k) {
-        // Mélange aléatoire de l'ordre de passage à chaque pas de temps
-        std::shuffle(ordre.begin(), ordre.end(), g);
-        for (Individu* i : ordre) {
-            
-            // Réinitialisation de l'envie de sortir
-            i->f = i->Fattraction();
 
-            // Interaction avec les autres individus
-            for (const Individu& autre : foule->listindiv) {
-                if (i->id != autre.id) {
-                    i->f = i->f + i->Finteraction(autre,A,B,k1,k2);
+    for (int i = 0; i < nbIndiv; ++i) {
+        Individu ind;
+        ind.id = i;
+        ind.m = poids(gen);
+        ind.r = (0.25/70)*ind.m; // Rayon de 25cm
+        ind.tau = 0.5;
+        ind.w = 1.34;
+        ind.c = cible;
+        ind.v = {0, 0};
+
+        bool positionValide = false;
+        int tentatives = 0;
+        const int MAX_TENTATIVES = 1000;
+//verification des chevauchements : 
+        while (!positionValide && tentatives < MAX_TENTATIVES) {
+            double x_test = distX(gen);
+            double y_test = distY(gen);
+            Point p_test(x_test, y_test);
+
+            positionValide = true;
+            for (const auto& existant : listindiv) {
+                double dist = (p_test - existant.p).norme();
+                // On laisse une petite marge de sécurité (ici 0.1m)
+                if (dist < (ind.r + existant.r + 0.1)) {
+                    positionValide = false;
+                    break;
                 }
             }
 
-            // Interaction avec les murs
-            if (murs != nullptr) {
-                i->f = i->f + i->Fmurs(*murs,A,B,k1,k2); 
+            if (positionValide) {
+                ind.p = p_test;
             }
-
-            // Mise à jour physique
-            i->v = i->v + (i->f / i->m) * dt;
-            i->p = i->p + i->v * dt;
-            
-            // Mise à jour de l'historique
-            i->ps.push_back(i->p);
+            tentatives++;
         }
+
+        if (tentatives >= MAX_TENTATIVES) {
+            std::cerr << "Impossible de placer l'individu " << i
+                      << " Zone trop dense !" << std::endl;
+            break; // On arrête de générer pour éviter une boucle infinie
+        }
+
+        listindiv.push_back(ind);
     }
 }
 
-void Dynamique::exporter(std::string nomFichier) {
-    std::ofstream fichier(nomFichier);
-    
+void Foule::genererFouleFichier(const std::string& nomFichier , Point cible) {
+    std::ifstream fichier(nomFichier);
     if (!fichier.is_open()) {
-        std::cerr << "Erreur : Impossible de créer le fichier d'export." << std::endl;
+        std::cerr << "Erreur lors de l'ouverture du fichier : " << nomFichier << std::endl;
         return;
     }
 
-    // En-tête du fichier (Temps, ID de l'individu, X, Y)
-    fichier << "t,id,x,y,r\n";
+    int id, ng;
+    double m, r, tau, w, x, y;
 
-    // On stocke chaque position d'un individu puis on change d'individu
-    int id_indiv = 0;
-    for (const auto& indiv : foule->listindiv) {
-        double t = 0;
-        for (const auto& pos : indiv.ps) {
-            fichier << t << "," << id_indiv << "," << pos.x << "," << pos.y << "," << indiv.r << "\n";
-            t += dt;
-        }
-        id_indiv++;
+    while (fichier >> id >> ng >> m >> r >> tau >> w >> x >> y) {
+        Individu ind;
+        ind.id = id;
+        ind.ng = ng;
+        ind.m = m;
+        ind.r = r;
+        ind.tau = tau;
+        ind.w = w;
+        ind.c = cible;
+        ind.p = {x, y};
+        ind.v = {0, 0}; // Vitesse initiale à zéro
+        listindiv.push_back(ind);
     }
 
     fichier.close();
-    std::cout << "Dynamique exportée avec succès dans : " << nomFichier << std::endl;
 }

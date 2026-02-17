@@ -60,7 +60,10 @@ int main() {
     Piece2.ajouteMur(std::make_pair(seg3_2, normale_droite));
 
     Point q5_2(20, 5), q6_2(20, 15);
-    Segment seg(q2_2, q5_2);
+    Segment seg4_2(q2_2, q5_2);
+    Segment seg5_2(q4_2, q6_2);
+    Piece2.ajouteMur(std::make_pair(seg4_2, normale_gauche));
+    Piece2.ajouteMur(std::make_pair(seg5_2, normale_gauche));
 
 
     // --- 2. Génération aléatoire de la Foule ---
