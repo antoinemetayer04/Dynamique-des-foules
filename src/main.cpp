@@ -52,7 +52,7 @@ int main() {
     Point laSortie(15, 2); // Destination commune pour tout le monde
 
     // On génère 10 personnes entre x=[0,2] et y=[1,3]
-    maFoule.genererFoule(nbIndividus, 0.0, 2.0, 1.0, 3.0, laSortie);
+    maFoule.genererFoule(nbIndividus, -9.0, 7.0, 1.0, 19.0, laSortie);
 
     // --- 3. Configuration de la Dynamique ---
     double dt = 0.01;    // Pas de temps de 10ms
@@ -77,7 +77,7 @@ int main() {
 
     // --- 5. Export des données pour MATLAB ---
     // Exportation de la géométrie des murs (utilisation de la fonction de mur.hpp)
-    maPiece.exportMatlab("results/murs.csv");
+    Piece1.exportMatlab("results/murs.csv");
 
     // Cette fonction génère le fichier que ton script MATLAB pourra lire
     simu.exporter("results/resultats_aleatoires.csv");
