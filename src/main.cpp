@@ -18,33 +18,33 @@ int main() {
     // -Création d'une première pièce 
 
     Murs Piece1;
-    Point q1(-10,0), q2(10,0);
-    Segment seg(q1,q2);
-    Vecteur normale(0,1);
-    Piece1.ajouteMur(std::make_pair(seg,normale));
+    Point q1_1(-10,0), q2_1(10,0);
+    Segment seg1_1(q1_1,q2_1);
+    Vecteur normale_haut(0,1);
+    Piece1.ajouteMur(std::make_pair(seg1_1,normale_haut));
 
-    Point q3(-10,20), q4(10,20);
-    Segment seg(q3, q4);
-    Vecteur normale(0,-1);
-    Piece1.ajouteMur(std::make_pair(seg, normale));
+    Point q3_1(-10,20), q4_1(10,20);
+    Segment seg2_1(q3_1, q4_1);
+    Vecteur normale_bas(0,-1);
+    Piece1.ajouteMur(std::make_pair(seg2_1, normale_bas));
 
-    Segment seg(q1, q3);
-    Vecteur normale(1,0);
-    Piece1.ajouteMur(std::make_pair(seg, normale));
+    Segment seg3_1(q1_1, q3_1);
+    Vecteur normale_droite(1,0);
+    Piece1.ajouteMur(std::make_pair(seg3_1, normale_droite));
 
-    Point q5(10,5), q6(10,15);
-    Segment seg(q1, q5);
-    Vecteur normale (-1, 0);
-    Piece1.ajouteMur(std::make_pair(seg, normale));
+    Point q5_1(10,5), q6_1(10,15);
+    Segment seg4_1(q1_1, q5_1);
+    Vecteur normale_gauche (-1, 0);
+    Piece1.ajouteMur(std::make_pair(seg4_1, normale_gauche));
 
-    Segment seg(q4, q6);
-    Vecteur normale(-1, 0);
-    Piece1.ajouteMur(std::make_pair(seg, normale));
+    Segment seg5_1(q4_1, q6_1);
+    Vecteur normale_gauche(-1, 0);
+    Piece1.ajouteMur(std::make_pair(seg5_1, normale_gauche));
 
-    Point q7(7.5, 16), q8(7.5, 4);
-    Segment seg(q7,q8);
-    Vecteur normale(-1,0);
-    Piece1.ajouteMur(std::make_pair(seg, normale));
+    Point q7_1(7.5, 16), q8_1(7.5, 4);
+    Segment seg6_1(q7_1,q8_1);
+    Vecteur normale_gauche(-1,0);
+    Piece1.ajouteMur(std::make_pair(seg6_1, normale_gauche));
 
     // --- 2. Génération aléatoire de la Foule ---
     Foule maFoule;
