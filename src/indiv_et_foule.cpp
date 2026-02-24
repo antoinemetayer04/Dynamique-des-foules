@@ -54,7 +54,8 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
 
 
         // calcul des parametres
-        double distance = (p-pi)*normale;
+        Vecteur diff = p-pi;
+        double distance = diff.norme();
         double s = r-distance ;
         if (distance > 1e-7 ){
         Vecteur n = normale;
