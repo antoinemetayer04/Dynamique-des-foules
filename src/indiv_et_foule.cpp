@@ -80,7 +80,7 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
         ind.m = poids(gen);
         ind.r = (0.25/70)*ind.m; // Rayon de 25cm
         ind.tau = 0.5;
-        ind.w = 6.0;
+        ind.w = 3.0;
         ind.c = cible;
         ind.v = {0, 0};
 
