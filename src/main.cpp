@@ -4,7 +4,19 @@
 #include "indiv_et_foule.hpp"
 #include "mur.hpp"
 
+constexpr int Sortie = 1;
+constexpr int SortieObs = 2;
+constexpr int CroisFoule = 3;
+
+constexpr int Calme = 1;
+constexpr int Normal = 2;
+constexpr int FluxDense = 3;
+constexpr int Panique = 2;
+
 int main() {
+
+    int mode = Sortie;
+    int Stress = Calme;
 
     // Création d'une première pièce avec 4 murs et un mur devant la sortie
 
@@ -37,7 +49,7 @@ int main() {
 
     Piece1.ajouteMur(std::make_pair(seg6_1, normale_gauche));
 
-    // 
+    // Création d'une première pièce avec 4 murs et une sortie
 
     Murs Piece2;
 
@@ -58,43 +70,139 @@ int main() {
     Piece2.ajouteMur(std::make_pair(seg4_2, normale_gauche));
     Piece2.ajouteMur(std::make_pair(seg5_2, normale_gauche));
 
+    // Création d'une première pièce avec 4 murs
+    Murs Piece3;
+    Piece3.ajouteMur(std::make_pair(seg1_2, normale_haut));
+    Piece3.ajouteMur(std::make_pair(seg2_2, normale_bas));
+    Piece3.ajouteMur(std::make_pair(seg3_2, normale_droite));
+    Segment seg6_2(q2_2, q4_2);
+    Piece3.ajouteMur(std::make_pair(seg6_2, normale_gauche));
 
-    // Génération aléatoire de la Foule
-    Foule maFoule;
-    int nbIndividus = 60;
-    Point laSortie(20, 10); // Destination commune pour tout le monde
+    if (mode == Sortie){
+        // Génération aléatoire de la Foule
+        Foule maFoule;
+        int nbIndividus = 100;
+        Point laSortie(30, 10); // Destination commune pour tout le monde
 
-    maFoule.genererFoule(nbIndividus, -9.0, 7.0, 1.0, 19.0, laSortie);
+        maFoule.genererFoule(nbIndividus, -19, 19.0, 1.0, 19.0, laSortie);
 
-    // Configuration de la Dynamique
-    double dt = 0.01;    // Pas de temps de 10ms
-    int nb_pas = 2000;   // Simulation sur 20 secondes
-    
-    // Initialisation du moteur de simulation
-    Dynamique simu(&maFoule, &Piece1, dt, nb_pas);
-    
-    // Paramètres physiques (Modèle de Helbing)
-    simu.A = 2000; 
-    simu.B = 0.05;
-    simu.k1 = 150000;
-    simu.k2 = 200000;
+        // Configuration de la Dynamique
+        double dt = 0.01;    // Pas de temps de 10ms
+        int nb_pas = 2000;   // Simulation sur 20 secondes
 
-    // Exécution
-    std::cout << "Lancement de la simulation avec " << nbIndividus << " individus..." << std::endl;
-    
-    // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
-    simu.calculer_algo_2();
-    
-    std::cout << "Simulation terminée avec succès." << std::endl;
+        // Initialisation du moteur de simulation
+        Dynamique simu(&maFoule, &Piece2, dt, nb_pas);
 
-    // Export des données pour MATLAB
-    // Exportation de la géométrie des murs
-    Piece1.exportMatlab("results/murs.csv");
+        // Paramètres physiques (Modèle de Helbing)
+        simu.A = 500; 
+        simu.B = 0.05;
 
-    // Exportation des résultats dynamiques
-    simu.exporter("results/resultats_aleatoires.csv");
 
-    std::cout << "Fichier 'resultats_aleatoires.csv' prêt pour la visualisation." << std::endl;
+        simu.k1 = 150000;
+        simu.k2 = 250000;
+        // Exécution
+        std::cout << "Lancement de la simulation" << std::endl;
+        
+        // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
+        simu.calculer_algo_2();
+        
+        std::cout << "Simulation terminée avec succès." << std::endl;
+
+        // Export des données pour MATLAB
+        // Exportation de la géométrie des murs
+        Piece2.exportMatlab("results/murs.csv");
+
+        // Exportation des résultats dynamiques
+        simu.exporter("results/resultats_aleatoires.csv");
+
+        std::cout << "Fichier 'resultats_aleatoires.csv' prêt pour la visualisation." << std::endl;
+    }
+
+    else if (mode == SortieObs){
+        Foule maFoule;
+        int nbIndividus = 60;
+        Point laSortie(20, 10); // Destination commune pour tout le monde
+
+        maFoule.genererFoule(nbIndividus, -9.0, 7.0, 1.0, 19.0, laSortie);
+
+        // Configuration de la Dynamique
+        double dt = 0.01;    // Pas de temps de 10ms
+        int nb_pas = 2000;   // Simulation sur 20 secondes
+
+        // Initialisation du moteur de simulation
+        Dynamique simu(&maFoule, &Piece1, dt, nb_pas);
+
+        // Paramètres physiques (Modèle de Helbing)
+        simu.A = 500; 
+        simu.B = 0.05;
+
+
+        simu.k1 = 150000;
+        simu.k2 = 250000;
+        // Exécution
+        std::cout << "Lancement de la simulation" << std::endl;
+        
+        // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
+        simu.calculer_algo_2();
+        
+        std::cout << "Simulation terminée avec succès." << std::endl;
+
+        // Export des données pour MATLAB
+        // Exportation de la géométrie des murs
+        Piece1.exportMatlab("results/murs.csv");
+
+        // Exportation des résultats dynamiques
+        simu.exporter("results/resultats_aleatoires.csv");
+
+        std::cout << "Fichier 'resultats_aleatoires.csv' prêt pour la visualisation." << std::endl;
+    }
+
+    else if (mode == CroisFoule){
+        Foule maFoule1;
+        int nbIndividus1 = 30;
+        Point laSortie1(18, 10); // Destination commune pour tout le monde
+
+        maFoule1.genererFoule(nbIndividus1, -20.0, -10.0, 5.0, 15.0, laSortie1);
+        
+        Foule maFoule2;
+        int nbIndividus2 = 30;
+        Point laSortie2(-18, 10);
+        maFoule2.genererFoule(nbIndividus2, 10, 19, 5.0, 15.0, laSortie2);
+
+        maFoule1.ajouterFoule(maFoule2);
+
+        // Configuration de la Dynamique
+        double dt = 0.01;    // Pas de temps de 10ms
+        int nb_pas = 2000;   // Simulation sur 20 secondes
+
+        // Initialisation du moteur de simulation
+        Dynamique simu(&maFoule1, &Piece3, dt, nb_pas);
+
+        // Paramètres physiques (Modèle de Helbing)
+        simu.A = 500; 
+        simu.B = 0.05;
+
+
+        simu.k1 = 150000;
+        simu.k2 = 250000;
+        // Exécution
+        std::cout << "Lancement de la simulation" << std::endl;
+        
+        // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
+        simu.calculer_algo_2();
+        
+        std::cout << "Simulation terminée avec succès." << std::endl;
+
+        // Export des données pour MATLAB
+        // Exportation de la géométrie des murs
+        Piece3.exportMatlab("results/murs.csv");
+
+        // Exportation des résultats dynamiques
+        simu.exporter("results/resultats_aleatoires.csv");
+
+        std::cout << "Fichier 'resultats_aleatoires.csv' prêt pour la visualisation." << std::endl;
+    }
+    if (Stress == Panique){}
 
     return 0;
 }

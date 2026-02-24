@@ -142,3 +142,18 @@ void Foule::genererFouleFichier(const std::string& nomFichier , Point cible) {
 
     fichier.close();
 }
+
+void Foule::ajouterFoule(const Foule& autre) {
+    // 1. Trouver l'ID le plus élevé actuellement
+    int maxId = -1;
+    for (const auto& ind : listindiv) {
+        if (ind.id > maxId) maxId = ind.id;
+    }
+
+    // 2. Ajouter les nouveaux individus en décalant leurs IDs
+    for (auto ind : autre.listindiv) {
+        maxId++;
+        ind.id = maxId; 
+        listindiv.push_back(ind);
+    }
+}
