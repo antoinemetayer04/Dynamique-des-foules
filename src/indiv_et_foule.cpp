@@ -64,8 +64,8 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distX(xMin, xMax);
     std::uniform_real_distribution<double> distY(yMin, yMax);
-    // Poids (moyenne 70kg, écart-type 15kg )
-    std::uniform_real_distribution<double> poids(40,90);
+    
+    std::normal_distribution<double> poids(70, 15); // Poids (moyenne 70kg, écart-type 15kg)
     
 
     for (int i = 0; i < nbIndiv; ++i) {
