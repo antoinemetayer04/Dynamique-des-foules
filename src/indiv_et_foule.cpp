@@ -28,7 +28,7 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     //extension dependance angulaire :
     double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
     // Force exponentielle + force de contact si pénétration
-            double force_contact = (s > 0) ? k1 * s * 2.0 : 0;  // Doubler si contact
+    double force_contact = (s > 0) ? k1 * s * 2.0 : 0;  // Doubler si contact
    //res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ; 
     res = poidangulaire * (n * (A + r) * exp(s / B) + n * force_contact + t * k2 * fmax(s, 0) * delta);
 }  
@@ -57,7 +57,7 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         double distance = (p-pi)*normale;
         double s = r-distance ;
         if (distance > 1e-7 ){
-        Vecteur n = (p- pi)/ distance;
+        Vecteur n = normale;
         Vecteur t = {-n.y, n.x};
         double delta = v*t;
         res= res + n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;}
