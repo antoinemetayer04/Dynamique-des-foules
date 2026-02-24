@@ -20,18 +20,15 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     double distance = (p-X.p).norme();
     if (distance > 1e-7) {
     double s = r+X.r - distance ;
-    double interaction_radius = (r + X.r) * 2.5;
-    if (distance < interaction_radius) {
+    
     Vecteur n = (p- X.p)/ distance;
     Vecteur t = {-n.y, n.x};
     double delta = (v-X.v)*t;
     //extension dependance angulaire :
     double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
-    // Force exponentielle + force de contact si pénétration
-    double force_contact = (s > 0) ? k1 * s * 2.0 : 0;  // Doubler si contact
-   //res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ; 
-    res = poidangulaire * (n * A* exp(s / B) + n * force_contact + t * k2 * fmax(s, 0) * delta);
-}  
+    
+    res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta); 
+  
 }
     return res;
 }
