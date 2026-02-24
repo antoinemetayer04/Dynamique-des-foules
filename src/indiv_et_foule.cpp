@@ -30,7 +30,7 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     // Force exponentielle + force de contact si pénétration
     double force_contact = (s > 0) ? k1 * s * 2.0 : 0;  // Doubler si contact
    //res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ; 
-    res = poidangulaire * (n * A* exp(s / B+r) + n * force_contact + t * k2 * fmax(s, 0) * delta);
+    res = poidangulaire * (n * A* exp(s / B) + n * force_contact + t * k2 * fmax(s, 0) * delta);
 }  
 }
     return res;
