@@ -23,7 +23,7 @@ int main() {
     Vecteur normale_droite(1,0);
     Piece1.ajouteMur(std::make_pair(seg3_1, normale_droite));
 
-    Point q5_1(10,5), q6_1(10,15);
+    Point q5_1(10,7), q6_1(10,13);
     Segment seg4_1(q2_1, q5_1);
     Vecteur normale_gauche (-1, 0);
     Piece1.ajouteMur(std::make_pair(seg4_1, normale_gauche));
@@ -32,12 +32,12 @@ int main() {
 
     Piece1.ajouteMur(std::make_pair(seg5_1, normale_gauche));
 
-    Point q7_1(7.5, 16), q8_1(7.5, 4);
+    Point q7_1(7.5, 14), q8_1(7.5, 6);
     Segment seg6_1(q7_1,q8_1);
 
     Piece1.ajouteMur(std::make_pair(seg6_1, normale_gauche));
 
-    // Création d'une première pièce avec 4 murs et un mur devant la sortie
+    // 
 
     Murs Piece2;
 
@@ -61,8 +61,8 @@ int main() {
 
     // Génération aléatoire de la Foule
     Foule maFoule;
-    int nbIndividus = 15;
-    Point laSortie(10, 10); // Destination commune pour tout le monde
+    int nbIndividus = 60;
+    Point laSortie(20, 10); // Destination commune pour tout le monde
 
     maFoule.genererFoule(nbIndividus, -9.0, 7.0, 1.0, 19.0, laSortie);
 
@@ -75,9 +75,9 @@ int main() {
     
     // Paramètres physiques (Modèle de Helbing)
     simu.A = 2000; 
-    simu.B = 0.08;
-    simu.k1 = 120000;
-    simu.k2 = 240000;
+    simu.B = 0.05;
+    simu.k1 = 150000;
+    simu.k2 = 200000;
 
     // Exécution
     std::cout << "Lancement de la simulation avec " << nbIndividus << " individus..." << std::endl;

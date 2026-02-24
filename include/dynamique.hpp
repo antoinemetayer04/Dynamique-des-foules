@@ -16,7 +16,7 @@ public :
     // Paramètres physiques (Modèle de Helbing)
     // k1, k2 : constantes de compression et de frottement    
     double k1 =100000; // 100000 < k1 < 150000
-    double k2 =200000; // 200000 < k2 < 300000
+    double k2 =200000; // 200000 < k2 < 305000
     
     // A, B : constantes de la force sociale (interaction à distance)
     double A =2000;  // 500 N < A < 5000 N 
