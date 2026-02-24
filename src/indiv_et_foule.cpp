@@ -25,8 +25,8 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     double delta = (v-X.v)*t;
     //extension dependance angulaire :
     double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
-    res = poidangulaire*(n*(A)*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ; // a voir le rapport entre A et les rayons. 
-
+    res = poidangulaire*(n*A*exp(s/(B+r))+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta) ; // a voir le rapport entre A et les rayons. 
+    
 }
     return res;
 }
