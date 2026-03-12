@@ -11,11 +11,11 @@ constexpr int CroisFoule = 3;
 constexpr int Calme = 1;
 constexpr int Normal = 2;
 constexpr int FluxDense = 3;
-constexpr int Panique = 2;
+constexpr int Panique = 4;
 
 int main() {
 
-    int mode = Sortie;
+    int mode = SortieObs;
     int Stress = Calme;
 
     // Création d'une première pièce avec 4 murs et un mur devant la sortie
@@ -104,7 +104,7 @@ int main() {
         std::cout << "Lancement de la simulation" << std::endl;
         
         // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
-        simu.calculer_algo_2();
+        simu.calculer_algo_1();
         
         std::cout << "Simulation terminée avec succès." << std::endl;
 
@@ -143,7 +143,7 @@ int main() {
         std::cout << "Lancement de la simulation" << std::endl;
         
         // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
-        simu.calculer_algo_2();
+        simu.calculer_algo_1();
         
         std::cout << "Simulation terminée avec succès." << std::endl;
 
@@ -189,7 +189,7 @@ int main() {
         std::cout << "Lancement de la simulation" << std::endl;
         
         // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
-        simu.calculer_algo_2();
+        simu.calculer_algo_1();
         
         std::cout << "Simulation terminée avec succès." << std::endl;
 
