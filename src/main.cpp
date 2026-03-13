@@ -172,7 +172,7 @@ int main() {
         maFoule1.ajouterFoule(maFoule2);
 
         // Configuration de la Dynamique
-        double dt = 0.01;    // Pas de temps de 10ms
+        double dt = 0.001;    // Pas de temps de 10ms
         int nb_pas = 2000;   // Simulation sur 20 secondes
 
         // Initialisation du moteur de simulation
