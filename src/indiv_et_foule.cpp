@@ -54,7 +54,7 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         Vecteur diff = p-pi;
         double distance = diff.norme();
         double s = r-distance ;
-        if (distance > 1e-7 ){
+        if (distance > 1e-2 ){
         Vecteur n = normale;
         Vecteur t = {-n.y, n.x};
         double delta = v*t;
