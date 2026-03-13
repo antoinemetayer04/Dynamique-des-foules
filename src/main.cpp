@@ -173,7 +173,7 @@ int main() {
 
         // Configuration de la Dynamique
         double dt = 0.001;    // Pas de temps de 10ms
-        int nb_pas = 2000;   // Simulation sur 20 secondes
+        int nb_pas = 20000;   // Simulation sur 20 secondes
 
         // Initialisation du moteur de simulation
         Dynamique simu(&maFoule1, &Piece3, dt, nb_pas);
