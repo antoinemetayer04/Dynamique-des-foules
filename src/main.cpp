@@ -87,7 +87,7 @@ int main() {
         maFoule.genererFoule(nbIndividus, -19, 19.0, 1.0, 19.0, laSortie);
 
         // Configuration de la Dynamique
-        double dt = 0.01;    // Pas de temps de 10ms
+        double dt = 0.001;    // Pas de temps de 1 ms
         int nb_pas = 2000;   // Simulation sur 20 secondes
 
         // Initialisation du moteur de simulation
@@ -126,7 +126,7 @@ int main() {
         maFoule.genererFoule(nbIndividus, -9.0, 7.0, 1.0, 19.0, laSortie);
 
         // Configuration de la Dynamique
-        double dt = 0.01;    // Pas de temps de 10ms
+        double dt = 0.01;    // Pas de temps de 5 ms
         int nb_pas = 2000;   // Simulation sur 20 secondes
 
         // Initialisation du moteur de simulation
@@ -134,16 +134,16 @@ int main() {
 
         // Paramètres physiques (Modèle de Helbing)
         simu.A = 500; 
-        simu.B = 0.05;
+        simu.B = 0.08;
 
 
-        simu.k1 = 150000;
-        simu.k2 = 250000;
+        simu.k1 = 120000;
+        simu.k2 = 240000;
         // Exécution
         std::cout << "Lancement de la simulation" << std::endl;
         
         // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
-        simu.calculer_algo_1();
+        simu.calculer_algo_2();
         
         std::cout << "Simulation terminée avec succès." << std::endl;
 

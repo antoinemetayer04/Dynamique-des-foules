@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 
+
 Vecteur Individu::Fattraction(){
     Vecteur d;
     double distance = (c - p).norme();
@@ -17,17 +18,21 @@ Vecteur Individu::Fattraction(){
 Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, double k2){
     
     Vecteur res= {0,0};
-    double distance = (p-X.p).norme();
-    if (distance > 1e-2) {
+    double distance = (p - X.p).norme();
+    if (distance > 1e-7) {
     double s = r+X.r - distance ;
     
-    Vecteur n = (p- X.p)/ distance;
+    Vecteur n = (p - X.p)/ distance;
     Vecteur t = {-n.y, n.x};
-    double delta = (v-X.v)*t;
+    double delta = (v - X.v)*t;
     //extension dependance angulaire :
-    double poidangulaire = 0.5*(1+(1+(v*(p-X.p)))/2);
-    
-    res = poidangulaire*(n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta); 
+    double cosPhi = 0;
+    if (v.norme() > 1e-5) {
+        cosPhi = (v * (p - X.p)) / (v.norme() * (p - X.p).norme());
+    }
+    double poidangulaire = 0.5 + 0.5*(1+cosPhi)/2.0;
+
+    res = poidangulaire*(n*A*exp(fmin(s,0)/B)+n*k1*fmax(s,0) + t*k2*fmax(s,0) * delta); 
   
 }
     return res;
@@ -39,14 +44,13 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
 
     for (const auto& m_pair : piece.murs) {
         Segment leSegment = m_pair.first;
-        Vecteur normale = m_pair.second;
         Point Q1 = leSegment.first;
         Point Q2 = leSegment.second;
     // calcul projeté sur le mur :
         Vecteur u = Q2 - Q1;
         double L2 = u * u;
         double t_proj = ((p - Q1) * u) / L2;
-        t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
+        t_proj = fmax(0.0, fmin(1.0, t_proj));
         Point pi = Q1 + (u * t_proj);   // chat gpt a juste fait la projection.
 
 
@@ -54,11 +58,11 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         Vecteur diff = p-pi;
         double distance = diff.norme();
         double s = r-distance ;
-        if (distance > 1e-2 ){
-        Vecteur n = normale;
+        if (distance > 1e-7 ){
+        Vecteur n = diff/distance;
         Vecteur t = {-n.y, n.x};
         double delta = v*t;
-        res= res + n*A*exp(s/B)+n*k1*fmax(s,0) +t*k2*fmax(s,0)*delta ;}
+        res = res + n*A*exp(fmin(0,s)/B)+n*k1*fmax(s,0) + t*k2*fmax(s,0)*delta ;}
     }
     return res;}
 

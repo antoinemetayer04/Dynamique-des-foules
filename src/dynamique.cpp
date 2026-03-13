@@ -31,16 +31,16 @@ void Dynamique::calculer_algo_1() {
         for (Individu& i : foule->listindiv) {
             // Limitation de l'accélération pour éviter sauts numériques
             Vecteur accel = i.f / i.m;
-            double a_max = 50.0; // m/s^2, valeur conservatrice
+            double a_max = 2.5; // m/s^2, valeur conservatrice
             double an = accel.norme();
             if (an > a_max) accel = accel * (a_max / an);
 
             i.v = i.v + accel * dt;
             // Limitation vitesse
-            double v_max = 5.0; // m/s
+            double v_max = 4.0; // m/s
             double vn = i.v.norme();
             if (vn > v_max) i.v = i.v * (v_max / vn);
-
+            
             i.p = i.p + i.v * dt;
 
             // Correction de pénétration pour les murs
@@ -53,7 +53,7 @@ void Dynamique::calculer_algo_1() {
                     double L2 = u * u;
                     if (L2 <= 1e-12) continue;
                     double t_proj = ((i.p - Q1) * u) / L2;
-                    t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
+                    t_proj = fmax(0.0, fmin(1.0, t_proj));
                     Point pi = Q1 + (u * t_proj);
                     double distance = (i.p - pi).norme();
                     if (distance < i.r && distance > 1e-12) {
@@ -101,12 +101,12 @@ void Dynamique::calculer_algo_2(){
 
             // Mise à jour physique avec clamp et correction
             Vecteur accel = i->f / i->m;
-            double a_max = 50.0;
+            double a_max = 2.5;
             double an = accel.norme();
             if (an > a_max) accel = accel * (a_max / an);
 
             i->v = i->v + accel * dt;
-            double v_max = 5.0;
+            double v_max = 4.0;
             double vn = i->v.norme();
             if (vn > v_max) i->v = i->v * (v_max / vn);
 
