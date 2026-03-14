@@ -32,8 +32,8 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     }
     double poidangulaire = 0.5 + 0.5*(1+cosPhi)/2.0;
 
-    res = poidangulaire*(n*A*exp(fmin(s,0)/B)+n*k1*fmax(s,0) + t*k2*fmax(s,0) * delta); 
-  
+    res = poidangulaire*(n*A*exp((s+ (r+X.r)*0.5)/B) + n*k1*fmax(s,0) + t*k2*fmax(s,0) * delta); 
+
 }
     return res;
 }
@@ -62,7 +62,8 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         Vecteur n = diff/distance;
         Vecteur t = {-n.y, n.x};
         double delta = v*t;
-        res = res + n*A*exp(fmin(0,s)/B)+n*k1*fmax(s,0) + t*k2*fmax(s,0)*delta ;}
+        //+ r*0.5
+        res = res + n*A*exp(s/B)+n*k1*fmax(s,0) + t*k2*fmax(s,0)*delta ;}
     }
     return res;}
 
@@ -81,7 +82,7 @@ void Foule::genererFoule(int nbIndiv, double xMin, double xMax, double yMin, dou
         ind.m = poids(gen);
         ind.r = (0.25/70)*ind.m; // Rayon de 25cm
         ind.tau = 0.5;
-        ind.w = 3.0;
+        ind.w = 2.0;
         ind.c = cible;
         ind.v = {0, 0};
 

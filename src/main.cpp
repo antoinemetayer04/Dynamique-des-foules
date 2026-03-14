@@ -133,8 +133,8 @@ int main() {
         Dynamique simu(&maFoule, &Piece1, dt, nb_pas);
 
         // Paramètres physiques (Modèle de Helbing)
-        simu.A = 500; 
-        simu.B = 0.08;
+        simu.A = 1000.0; 
+        simu.B = 0.1;
 
 
         simu.k1 = 120000;
@@ -143,7 +143,7 @@ int main() {
         std::cout << "Lancement de la simulation" << std::endl;
         
         // Utilisation de l'algorithme avec mélange aléatoire pour plus de réalisme
-        simu.calculer_algo_2();
+        simu.calculer_algo_1();
         
         std::cout << "Simulation terminée avec succès." << std::endl;
 

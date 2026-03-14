@@ -29,41 +29,16 @@ void Dynamique::calculer_algo_1() {
 
         // Mise à jour des positions et vitesses puis l'historique
         for (Individu& i : foule->listindiv) {
-            // Limitation de l'accélération pour éviter sauts numériques
-            Vecteur accel = i.f / i.m;
-            double a_max = 2.5; // m/s^2, valeur conservatrice
-            double an = accel.norme();
-            if (an > a_max) accel = accel * (a_max / an);
 
+            Vecteur accel = i.f / i.m;
             i.v = i.v + accel * dt;
+
             // Limitation vitesse
-            double v_max = 4.0; // m/s
+            double v_max = 6.0; // m/s
             double vn = i.v.norme();
             if (vn > v_max) i.v = i.v * (v_max / vn);
             
             i.p = i.p + i.v * dt;
-
-            // Correction de pénétration pour les murs
-            if (murs != nullptr) {
-                for (const auto& m_pair : murs->murs) {
-                    Segment S = m_pair.first;
-                    Point Q1 = S.first;
-                    Point Q2 = S.second;
-                    Vecteur u = Q2 - Q1;
-                    double L2 = u * u;
-                    if (L2 <= 1e-12) continue;
-                    double t_proj = ((i.p - Q1) * u) / L2;
-                    t_proj = fmax(0.0, fmin(1.0, t_proj));
-                    Point pi = Q1 + (u * t_proj);
-                    double distance = (i.p - pi).norme();
-                    if (distance < i.r && distance > 1e-12) {
-                        Vecteur n = (i.p - pi) / distance;
-                        i.p = pi + n * i.r;
-                        double vn_n = i.v * n;
-                        i.v = i.v - n * vn_n; // supprimer composante normale
-                    }
-                }
-            }
 
             i.ps.push_back(i.p);
         }
@@ -84,7 +59,7 @@ void Dynamique::calculer_algo_2(){
         std::shuffle(ordre.begin(), ordre.end(), g);
         for (Individu* i : ordre) {
             
-            // Réinitialisation de l'envie de sortir
+            // Réinitialisation de la force avec l'envie de sortir
             i->f = i->Fattraction();
 
             // Interaction avec les autres individus
@@ -99,39 +74,17 @@ void Dynamique::calculer_algo_2(){
                 i->f = i->f + i->Fmurs(*murs,A,B,k1,k2); 
             }
 
-            // Mise à jour physique avec clamp et correction
+            // Mise à jour des positions et vitesses puis l'historique
             Vecteur accel = i->f / i->m;
-            double a_max = 2.5;
-            double an = accel.norme();
-            if (an > a_max) accel = accel * (a_max / an);
 
             i->v = i->v + accel * dt;
-            double v_max = 4.0;
+
+            // Limitation vitesse
+            double v_max = 6.0;
             double vn = i->v.norme();
             if (vn > v_max) i->v = i->v * (v_max / vn);
 
             i->p = i->p + i->v * dt;
-
-            if (murs != nullptr) {
-                for (const auto& m_pair : murs->murs) {
-                    Segment S = m_pair.first;
-                    Point Q1 = S.first;
-                    Point Q2 = S.second;
-                    Vecteur u = Q2 - Q1;
-                    double L2 = u * u;
-                    if (L2 <= 1e-12) continue;
-                    double t_proj = ((i->p - Q1) * u) / L2;
-                    t_proj = std::fmax(0.0, std::fmin(1.0, t_proj));
-                    Point pi = Q1 + (u * t_proj);
-                    double distance = (i->p - pi).norme();
-                    if (distance < i->r && distance > 1e-12) {
-                        Vecteur n = (i->p - pi) / distance;
-                        i->p = pi + n * i->r;
-                        double vn_n = i->v * n;
-                        i->v = i->v - n * vn_n;
-                    }
-                }
-            }
 
             // Mise à jour de l'historique
             i->ps.push_back(i->p);
