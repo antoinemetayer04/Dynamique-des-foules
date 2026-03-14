@@ -24,7 +24,7 @@ public:
     Vecteur f;// force exercée courante
     std::list<Point> ps;// histoprique des positions
 
-    Vecteur Fattraction();
+    Vecteur Fattraction();  
     Vecteur Finteraction(const Individu& indiv,double A, double B, double k1, double k2);
     Vecteur Fmurs(const Murs& piece,double A, double B, double k1, double k2);
 };
@@ -33,8 +33,9 @@ public:
 class Foule
 {   private:
     public:
-    std::list<Individu> listindiv;
-    // rajouter calcul des forces de tous les individus
+    std::list<Individu> listindiv; // liste des individues de la foule
+
+    // fonctions de generations de foule 
     void genererFoule(int nbIndiv, double xMin, double xMax, double yMin, double yMax, Point cible);
     void genererFouleFichier(const std::string& nomFichier , Point cible);
     void ajouterFoule(const Foule& autre);
