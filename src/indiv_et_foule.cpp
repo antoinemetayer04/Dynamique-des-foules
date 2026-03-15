@@ -24,11 +24,11 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     
         Vecteur n = (p - X.p)/ distance;  // vecteur direction normalisé
         Vecteur t = {-n.y, n.x};  // vecteur tangent
-        double delta = (v - X.v)*t;   // difference de vitesse projeté sur la direction tangentielle 
+        double delta = (v - X.v)|t;   // difference de vitesse projeté sur la direction tangentielle 
         //extension dependance angulaire :
         double cosPhi = 0;
         if (v.norme() > 1e-5) {
-            cosPhi = (v * (p - X.p)) / (v.norme() * (p - X.p).norme());
+            cosPhi = (v | (p - X.p)) / (v.norme() * (p - X.p).norme());
         }
         double poidangulaire = 0.5 + 0.5*(1+cosPhi)/2.0;
 
@@ -47,8 +47,8 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         Point Q2 = leSegment.second;
     // calcul du projeté de la position sur le mur :
         Vecteur u = Q2 - Q1;       
-        double L2 = u * u;   // caré de la norme du mur 
-        double t_proj = ((p - Q1) * u) / L2;   
+        double L2 = u | u;   // caré de la norme du mur 
+        double t_proj = ((p - Q1) | u) / L2;   
         t_proj = fmax(0.0, fmin(1.0, t_proj));
         Point pi = Q1 + (u * t_proj);    // résultat de la projection 
 
@@ -60,7 +60,7 @@ Vecteur Individu::Fmurs(const Murs& piece,double A, double B, double k1, double 
         if (distance > 1e-7 ){
         Vecteur n = diff/distance;
         Vecteur t = {-n.y, n.x};
-        double delta = v*t;
+        double delta = v|t;
         //+ r*0.5
         res = res + n*A*exp(s/B)+n*k1*fmax(s,0) + t*k2*fmax(s,0)*delta ;}   
     }
