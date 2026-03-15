@@ -55,13 +55,14 @@ Pour exécuter la simulation :
 ```bash
 make run
 ```
+(A noter que cette commande compile aussi le code, ce qui exempte de la commande make all.)
 
 Ou directement :
 ```bash
 ./dynamique-des-foules.x
 ```
 
-Les résultats seront sauvegardés dans le dossier `results/`.
+Les résultats seront sauvegardés dans le dossier `results/` dans les fichiers `results/murs.csv` et `results/resultats.csv`.
 
 ## Visualisation
 
