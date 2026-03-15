@@ -31,6 +31,8 @@ public :
     // Calcul de la dynamique
     void calculer_algo_1();
     void calculer_algo_2();
+
+    // Exportation des données
     void exporter(std::string nomFichier);
 };
 

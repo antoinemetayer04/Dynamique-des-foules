@@ -20,21 +20,20 @@ Vecteur Individu::Finteraction(const Individu& X,double A, double B, double k1, 
     Vecteur res= {0,0};
     double distance = (p - X.p).norme();  // distance entre l'individue courant et l'individue exercant la force
     if (distance > 1e-7) {          
-       double s = r+X.r - distance ;   }   // on evite la division par zero grace a la borne inf et on calcul l'indicateur s pour savoir si les individues se chevauchent 
+        double s = r+X.r - distance ;      // on evite la division par zero grace a la borne inf et on calcul l'indicateur s pour savoir si les individues se chevauchent 
     
-    Vecteur n = (p - X.p)/ distance;  // vecteur direction normalisé
-    Vecteur t = {-n.y, n.x};  // vecteur tangent
-    double delta = (v - X.v)*t;   // difference de vitesse projeté sur la direction tangentielle 
-    //extension dependance angulaire :
-    double cosPhi = 0;
-    if (v.norme() > 1e-5) {
-        cosPhi = (v * (p - X.p)) / (v.norme() * (p - X.p).norme());
+        Vecteur n = (p - X.p)/ distance;  // vecteur direction normalisé
+        Vecteur t = {-n.y, n.x};  // vecteur tangent
+        double delta = (v - X.v)*t;   // difference de vitesse projeté sur la direction tangentielle 
+        //extension dependance angulaire :
+        double cosPhi = 0;
+        if (v.norme() > 1e-5) {
+            cosPhi = (v * (p - X.p)) / (v.norme() * (p - X.p).norme());
+        }
+        double poidangulaire = 0.5 + 0.5*(1+cosPhi)/2.0;
+
+        res = poidangulaire*(n*A*exp((s+ (r+X.r)*0.5)/B) + n*k1*fmax(s,0) + t*k2*fmax(s,0) * delta);   // calcul de la force exercée par l'individu X sur l'individu courant 
     }
-    double poidangulaire = 0.5 + 0.5*(1+cosPhi)/2.0;
-
-    res = poidangulaire*(n*A*exp((s+ (r+X.r)*0.5)/B) + n*k1*fmax(s,0) + t*k2*fmax(s,0) * delta);   // calcul de la force exercée par l'individu X sur l'individu courant 
-
-}
     return res;
 }
 
