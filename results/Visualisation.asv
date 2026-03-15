@@ -1,10 +1,15 @@
-clear; clc;
+clear all; clc;
 
 %% Chargement des données
-data_foule = readtable('resultats_aleatoires.csv');
+% Si vous venez d'éxecuter le c++, choisir 'resultats.csv' puis 'murs.csv'
+
+% Si vous voulez visionner des résultats pré-enregistrés, sélectionner ...
+% ... le résultat souhaité et la pièce associée 
+% Exemple : 'resultats_SortieObs_Normal.csv' avec 'murs_Sortie_Obstruée.csv'
+data_foule = readtable('resultats_normal_sans_limite_vitesse.csv');
 data_murs = readtable('murs.csv');
 
-% Extraction des paramètres t et id
+% Extraction des paramètres t et id en retirant les doublons
 ids = unique(data_foule.id);
 temps = unique(data_foule.t);
 nb_indiv = length(ids);
@@ -18,8 +23,8 @@ xlabel('Position X (m)');
 ylabel('Position Y (m)');
 
 % Définition des limites des axes
-all_x = [data_foule.x; data_murs.x1; data_murs.x2];
-all_y = [data_foule.y; data_murs.y1; data_murs.y2];
+all_x = [data_murs.x1; data_murs.x2];
+all_y = [data_murs.y1; data_murs.y2];
 axis([min(all_x)-1 max(all_x)+1 min(all_y)-1 max(all_y)+1]); 
 
 % Tracé du mur
@@ -36,7 +41,7 @@ for j = 1:height(data_murs)
            'Color', 'r', 'MaxHeadSize', 0.5, 'AutoScale', 'off');
 end
 
-% Initialisation des points
+% Initialisation des points (aidé par Gemini pour la représentation des points)
 h = gobjects(nb_indiv, 1);
 couleurs = lines(nb_indiv); % Génère des couleurs distinctes
 
@@ -45,21 +50,26 @@ t_debut = temps(1); % On récupère le premier instant T
 for i = 1:nb_indiv
     % 1. Trouver la position initiale (t=0) de cet individu
     idx_init = (abs(data_foule.t - t_debut) < 1e-5 & data_foule.id == ids(i));
-    
-    % On récupère le rayon du premier point de cet individu
-    r_indiv = data_foule.r(find(data_foule.id == ids(i), 1));
-    
-    % On initialise le point à une position invisible (NaN)
-    % On crée un rectangle avec Curvature [1 1] pour faire un cercle
-    % Position = [x-r, y-r, 2*r, 2*r]
-    h(i) = rectangle('Position', [NaN, NaN, 2*r_indiv, 2*r_indiv], ...
-                     'Curvature', [1 1], ...
-                     'FaceColor', couleurs(i,:), ...
-                     'EdgeColor', 'k');
+
+    if any(idx_init)
+        x0 = data_foule.x(idx_init);
+        y0 = data_foule.y(idx_init);
+        r0 = data_foule.r(idx_init);
+        
+        % On crée un rectangle avec Curvature [1 1] pour faire un cercle
+        % Position = [x-r, y-r, 2*r, 2*r]
+        h(i) = rectangle('Position', [x0-r0, y0-r0, 2*r0, 2*r0], ...
+                         'Curvature', [1 1], ...
+                         'FaceColor', couleurs(i,:), ...
+                         'EdgeColor', 'k');
+    else
+        % Sécurité au cas où l'individu n'existe pas à t=0
+        h(i) = rectangle('Position', [0, 0, 0.1, 0.1], 'Visible', 'off');
+    end
 end
 
 %% Boucle graphique
-for k = 1:length(temps)
+for k = 1:4:length(temps)
     t_actuel = temps(k);
     
     % Pour chaque individu, on met à jour sa position

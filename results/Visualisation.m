@@ -1,10 +1,15 @@
-clear; clc;
+clear all; clc;
 
 %% Chargement des données
-data_foule = readtable('resultats_aleatoires.csv');
+% Si vous venez d'éxecuter le c++, choisir 'resultats.csv' puis 'murs.csv'
+
+% Si vous voulez visionner des résultats pré-enregistrés, sélectionner ...
+% ... le résultat souhaité et la pièce associée 
+% Exemple : 'resultats_SortieObs_Normal.csv' avec 'murs_Sortie_Obstruée.csv'
+data_foule = readtable('resultats.csv');
 data_murs = readtable('murs.csv');
 
-% Extraction des paramètres t et id
+% Extraction des paramètres t et id en retirant les doublons
 ids = unique(data_foule.id);
 temps = unique(data_foule.t);
 nb_indiv = length(ids);
@@ -36,7 +41,7 @@ for j = 1:height(data_murs)
            'Color', 'r', 'MaxHeadSize', 0.5, 'AutoScale', 'off');
 end
 
-% Initialisation des points
+% Initialisation des points (aidé par Gemini pour la représentation des points)
 h = gobjects(nb_indiv, 1);
 couleurs = lines(nb_indiv); % Génère des couleurs distinctes
 
@@ -64,7 +69,7 @@ for i = 1:nb_indiv
 end
 
 %% Boucle graphique
-for k = 1:length(temps)
+for k = 1:4:length(temps)
     t_actuel = temps(k);
     
     % Pour chaque individu, on met à jour sa position

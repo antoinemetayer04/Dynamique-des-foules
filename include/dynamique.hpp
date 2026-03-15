@@ -15,12 +15,12 @@ private:
 public :
     // Paramètres physiques (Modèle de Helbing)
     // k1, k2 : constantes de compression et de frottement    
-    double k1 = 120000; // 100000 < k1 < 150000
-    double k2 = 240000; // 200000 < k2 < 305000
+    double k1 = 120000.0; // 100000 < k1 < 150000
+    double k2 = 240000.0; // 200000 < k2 < 305000
     
     // A, B : constantes de la force sociale (interaction à distance)
-    double A = 2000;  // 500 N < A < 5000 N 
-    double B = 0.08; // 0.05 m < B < 0.2 m
+    double A = 2000.0;  // 500 N < A < 5000 N 
+    double B = 0.1; // 0.05 m < B < 0.2 m
 
     double dt; // Pas de temps de la simulation
     int nbt; // Nombre de pas de temps

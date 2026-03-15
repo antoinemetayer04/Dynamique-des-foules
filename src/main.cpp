@@ -20,15 +20,15 @@ int main() {
     int Stress = Normal;    // Niveau de stress (Calme, Normal, FluxDense ou Panique)
     int algo = 2;          // Algorithme choisi (1 ou 2)
 
-    // Paramètre A du modèle de Helbing (intensité de répulsion)
-    int a = 2000;
-    if (Stress == Calme) {a = 1000;}
-    else if (Stress == Normal) {a = 2000;}
-    else if (Stress == FluxDense) {a = 4000;}
-    else if (Stress == Panique) {a = 7500;}
+    // Paramètre A et B du modèle de Helbing (intensité de répulsion et distance)
+    double a = 2000.0;
+    double b = 0.1;
+    if (Stress == Calme) {a = 1000.0; b = 0.1;}
+    else if (Stress == Normal) {a = 2000.0; b = 0.08;}
+    else if (Stress == FluxDense) {a = 4000.0; b = 0.05;}
+    else if (Stress == Panique) {a = 7500.0; b = 0.15;}
 
     // Autres paramètres du modèle
-    double b = 0.1;    // Paramètre B (0.05 m < B < 0.2 m) (rayon d'interaction)
     // k1, k2 : constantes de compression et de frottement    
     double K1 = 120000; // 100000 < k1 < 150000
     double K2 = 240000; // 200000 < k2 < 305000
