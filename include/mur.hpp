@@ -16,7 +16,7 @@ public :
     Vecteur operator+(const Vecteur& v) const { return {x + v.x, y + v.y}; }
     Vecteur operator-(const Vecteur& v) const { return {x - v.x, y - v.y}; }
     Vecteur operator/(double s) const { return {x / s, y / s}; }
-    double operator*(const Vecteur& v) const { return x * v.x + y * v.y; }
+    double operator|(const Vecteur& v) const { return x * v.x + y * v.y; }
     double norme() const { return std::sqrt(x * x + y * y); }
 
 
