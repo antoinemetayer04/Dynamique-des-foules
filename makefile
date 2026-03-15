@@ -33,9 +33,6 @@ clean:
 	@rm -f *~
 	@rm -rf $(BUILD_PATH)
 
-clean-data:
-	@rm -rf $(RESULTS_PATH)
-
 realclean: clean 
 	@rm -f $(EXE)
 
