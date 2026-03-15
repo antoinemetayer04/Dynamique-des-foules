@@ -19,6 +19,8 @@ Et différents niveaux de stress :
 - Flux dense
 - Panique
 
+Toutes ces possibilités sont sélectionnables dans le fichier `src/main.cpp`
+
 ## Paramètres Physiques
 
 Le modèle utilise les paramètres suivants (basés sur Helbing) :
@@ -64,6 +66,8 @@ Les résultats seront sauvegardés dans le dossier `results/`.
 ## Visualisation
 
 Les résultats peuvent être visualisés en utilisant le script MATLAB `Visualisation.m` dans le dossier `results/`.
+
+Vous devez suivre les informations contenues dans le fichier MATLAB concernant la sélection de fichiers à visualiser. 
 
 ## Auteurs
 
